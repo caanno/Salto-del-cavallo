@@ -24,11 +24,11 @@ if "start_pos" not in st.session_state:
 
 if st.session_state.start_pos is None:
     st.markdown("<h1 style='text-align: center; color: brown;margin-top:-70px;'>Il salto del cavallo ♞</h1>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: gray;margin-top:-15px;'>Scegli la casella da cui partire e visualizza il percorso del cavallo sulla scacchiera</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: gray;margin-top:-15px;font-size:18px;'>Scegli la casella da cui partire e visualizza il percorso del cavallo sulla scacchiera</h2>", unsafe_allow_html=True)
     pos = chessboard_buttons() # restituisce una coppia colonna riga corrispondente alla casella selezionata
     if pos is not None:
         st.session_state.start_pos = pos    # casella selezionata
-        st.experimental_rerun()
+        #st.experimental_rerun()
 else:
 
     # Pulsante per tornare indietro (PRIMA del calcolo)
@@ -36,7 +36,7 @@ else:
     with col5:
         if st.button("🔄 Scegli un'altra casella"):
             st.session_state.start_pos = None
-            st.experimental_rerun()
+            #st.experimental_rerun()
     
     col, row = st.session_state.start_pos
     cols_labels = list(string.ascii_uppercase[:8])
@@ -57,3 +57,4 @@ else:
                 st.image(gif_bytes)
         else:
             st.error('Nessun tour trovato')
+
