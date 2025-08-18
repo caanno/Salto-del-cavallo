@@ -31,7 +31,6 @@ if st.session_state.start_pos is None:
     pos = chessboard_buttons()
     if pos is not None:
         st.session_state.start_pos = pos
-        st.experimental_rerun()  # puoi rimuoverla se la tua versione non la supporta
 
 # Se è stata selezionata una casella
 if st.session_state.start_pos is not None:
@@ -39,7 +38,6 @@ if st.session_state.start_pos is not None:
     with col5:
         if st.button("🔄 Scegli un'altra casella"):
             st.session_state.start_pos = None
-            st.experimental_rerun()  # opzionale, Streamlit aggiornerà comunque la UI
     
     col, row = st.session_state.start_pos
     cols_labels = list(string.ascii_uppercase[:8])
@@ -58,3 +56,4 @@ if st.session_state.start_pos is not None:
                 st.image(gif_bytes)
         else:
             st.error('Nessun tour trovato')
+
