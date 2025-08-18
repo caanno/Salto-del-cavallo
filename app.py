@@ -31,16 +31,12 @@ if st.session_state.start_pos is None:
     pos = chessboard_buttons()  # restituisce una coppia colonna riga corrispondente alla casella selezionata
     if pos is not None:
         st.session_state.start_pos = pos
-        st.experimental_rerun()
-
 else:
     # Pulsante per tornare indietro
     col4, col5 = st.columns([0.7,0.3])
     with col5:
         if st.button("🔄 Scegli un'altra casella"):
-            st.session_state.start_pos = None
-            st.experimental_rerun()
-    
+            st.session_state.start_pos = None    
     col, row = st.session_state.start_pos
     cols_labels = list(string.ascii_uppercase[:8])
     square_name = f"{cols_labels[col]}{row+1}"
@@ -59,3 +55,4 @@ else:
                 st.image(gif_bytes)
         else:
             st.error('Nessun tour trovato')
+
