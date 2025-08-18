@@ -46,7 +46,7 @@ else:
     st.markdown(f"<h3 style='text-align: center; color: black; margin-top:-15px;'>Casella selezionata: {square_name}</h3>", unsafe_allow_html=True)
 
     # Calcolo tour del cavallo
-    with st.spinner("Il calcolo del percorso del cavallo potrebbe richiedere alcuni secondi..."):        
+    with st.spinner("Il calcolo del percorso potrebbe richiedere alcuni secondi..."):        
         tour = solve_knight_tour((row, col))
         if tour:
             gif_bytes = animate_knight_tour(tour, interval=500, fps=2)
@@ -55,4 +55,5 @@ else:
                 st.image(gif_bytes)
         else:
             st.error('Nessun tour trovato')
+
 
