@@ -23,15 +23,18 @@ if "start_pos" not in st.session_state:
     st.session_state.start_pos = None
 
 if st.session_state.start_pos is None:
-    st.markdown("<h1 style='text-align: center; color: brown;margin-top:-50px;'>Il salto del cavallo ♞</h1>", unsafe_allow_html=True)
-    st.markdown("<h5 style='text-align: center; color: gray;margin-top:-15px; font-size:18px;'>Scegli la casella da cui partire e visualizza il percorso del cavallo sulla scacchiera</h5>", unsafe_allow_html=True)
-    pos = chessboard_buttons() # restituisce una coppia colonna riga corrispondente alla casella selezionata
+    # Titolo e istruzioni
+    st.markdown("<h1 style='text-align: center; color: brown; margin-top:-50px;'>Il salto del cavallo ♞</h1>", unsafe_allow_html=True)
+    st.markdown("<h5 style='text-align: center; color: gray; margin-top:-15px; font-size:18px;'>Scegli la casella da cui partire e visualizza il percorso del cavallo sulla scacchiera</h5>", unsafe_allow_html=True)
+    
+    # Mostra scacchiera
+    pos = chessboard_buttons()  # restituisce una coppia colonna riga corrispondente alla casella selezionata
     if pos is not None:
-        st.session_state.start_pos = pos    # casella selezionata
+        st.session_state.start_pos = pos
         st.experimental_rerun()
-else:
 
-    # Pulsante per tornare indietro (PRIMA del calcolo)
+else:
+    # Pulsante per tornare indietro
     col4, col5 = st.columns([0.7,0.3])
     with col5:
         if st.button("🔄 Scegli un'altra casella"):
@@ -43,12 +46,11 @@ else:
     square_name = f"{cols_labels[col]}{row+1}"
     
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<h1 style='text-align: center; color: brown;margin-top:-50px;'>Il salto del cavallo ♞</h1>", unsafe_allow_html=True)
-    st.markdown(f"<h3 style='text-align: center; color: black;margin-top:-15px;'>Casella selezionata: {square_name}</h3>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: brown; margin-top:-50px;'>Il salto del cavallo ♞</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h3 style='text-align: center; color: black; margin-top:-15px;'>Casella selezionata: {square_name}</h3>", unsafe_allow_html=True)
 
-
-    # Se non hai premuto il pulsante, calcola il tour
-    with st.spinner(f"Il calcolo del percorso del cavallo potrebbere richiedere alcuni secondi..."):        
+    # Calcolo tour del cavallo
+    with st.spinner("Il calcolo del percorso del cavallo potrebbe richiedere alcuni secondi..."):        
         tour = solve_knight_tour((row, col))
         if tour:
             gif_bytes = animate_knight_tour(tour, interval=500, fps=2)
@@ -57,9 +59,3 @@ else:
                 st.image(gif_bytes)
         else:
             st.error('Nessun tour trovato')
-
-
-
-
-
-
