@@ -44,7 +44,7 @@ else:
     
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<h1 style='text-align: center; color: brown;margin-top:-50px;'>Il salto del cavallo ♞</h1>", unsafe_allow_html=True)
-    st.markdown(f"<h3 style='text-align: center; color: black;margin-top:-15px;'>Casella selezionata: {square_name}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h3 style='text-align: center; color: black;margin-top:-15px;'>Casella selezionata: {square_name}</h3>", unsafe_allow_html=True)
 
 
     # Se non hai premuto il pulsante, calcola il tour
@@ -57,6 +57,7 @@ else:
                 st.image(gif_bytes)
         else:
             st.error('Nessun tour trovato')
+
 
 
 
