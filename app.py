@@ -5,7 +5,7 @@ st.set_page_config(layout="wide")
 
 cols_labels = list(string.ascii_uppercase[:8])
 
-# CSS per bottoni
+# CSS per bottoni e container scrollabile
 st.markdown("""
 <style>
 .square-btn {
@@ -15,9 +15,14 @@ st.markdown("""
     font-weight: bold;
     margin: 1px !important;
 }
+
 .scroll-container {
     overflow-x: auto;
     white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* scroll fluido su mobile */
+}
+.row-container {
+    display: inline-block;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -28,7 +33,7 @@ st.markdown("## ♟️ Scacchiera Interattiva")
 st.markdown('<div class="scroll-container">', unsafe_allow_html=True)
 
 for row in range(7, -1, -1):  
-    row_html = ""
+    row_html = '<div class="row-container">'
     for col in range(8):  
         square_name = f"{cols_labels[col]}{row+1}"
         color = "#EEE" if (row + col) % 2 == 0 else "#555"
@@ -39,6 +44,7 @@ for row in range(7, -1, -1):
             </button>
         </form>
         """
+    row_html += '</div>'
     st.markdown(row_html, unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
