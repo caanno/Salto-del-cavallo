@@ -1,34 +1,44 @@
 import streamlit as st
 import string
 
-# Etichette colonne A-H
+st.set_page_config(layout="wide")
+
 cols_labels = list(string.ascii_uppercase[:8])
 
-st.set_page_config(layout="wide")
-st.markdown("## ♟️ Scacchiera Interattiva")
-
-# CSS per rendere i bottoni grandi e leggibili anche da telefono
+# CSS per bottoni
 st.markdown("""
 <style>
-button[kind="secondary"] {
-    width: 100% !important;
-    height: 55px !important;
+.square-btn {
+    width: 60px !important;
+    height: 60px !important;
     font-size: 18px !important;
     font-weight: bold;
+    margin: 1px !important;
+}
+.scroll-container {
+    overflow-x: auto;
+    white-space: nowrap;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Disegno scacchiera
-for row in range(7, -1, -1):   # Riga 8 → 1
-    cols = st.columns(8, gap="small")  # 8 colonne
-    for col in range(8):  
-        square_name = f"{cols_labels[col]}{row+1}"  # Es. A8, B7, ...
-        color = "⬜" if (row + col) % 2 == 0 else "⬛"  # solo per indicazione logica
-        with cols[col]:
-            if st.button(square_name, key=square_name):
-                st.session_state["selected_square"] = square_name
+st.markdown("## ♟️ Scacchiera Interattiva")
 
-# Mostra casella scelta
-if "selected_square" in st.session_state:
-    st.success(f"Hai scelto: {st.session_state['selected_square']}")
+# Container scrollabile
+st.markdown('<div class="scroll-container">', unsafe_allow_html=True)
+
+for row in range(7, -1, -1):  
+    row_html = ""
+    for col in range(8):  
+        square_name = f"{cols_labels[col]}{row+1}"
+        color = "#EEE" if (row + col) % 2 == 0 else "#555"
+        row_html += f"""
+        <form action="" method="get" style="display:inline-block;">
+            <button class="square-btn" style="background:{color};color:black;" name="square" value="{square_name}">
+                {square_name}
+            </button>
+        </form>
+        """
+    st.markdown(row_html, unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
