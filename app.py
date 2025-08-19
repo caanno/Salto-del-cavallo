@@ -1,64 +1,62 @@
 import streamlit as st
 import string
-from knight_tour import solve_knight_tour
-from animate import animate_knight_tour
 
-# Funzione per generare la griglia di bottoni
-def chessboard_buttons():
-    cols_labels = list(string.ascii_uppercase[:8])  # A-H
-    rows_labels = list(range(8, 0, -1))  # 8-1 (origine in basso a sinistra)
-    
-    selected = None
-    
-    for row in rows_labels:
-        cols = st.columns(8, gap='small')
-        for col_idx, col in enumerate(cols):
-            square_name = f"{cols_labels[col_idx]}{row}"
-            if col.button(square_name, key=square_name):
-                selected = (col_idx, row-1)  # col, row index 0-based
-    return selected
+# Configurazione pagina
+st.set_page_config(page_title="Il salto del cavallo ♞", layout="wide")
 
-# Stato iniziale
+# CSS responsive
+st.markdown("""
+    <style>
+    .chessboard {
+        display: grid;
+        grid-template-columns: repeat(8, minmax(30px, 1fr));
+        gap: 4px;
+        max-width: 600px;
+        margin: auto;
+    }
+    .square-btn {
+        width: 100%;
+        aspect-ratio: 1; /* quadrato */
+        font-size: clamp(10px, 3vw, 22px);
+        font-weight: bold;
+        border: 1px solid #444;
+        border-radius: 6px;
+        cursor: pointer;
+        background: white;
+    }
+    .square-btn:hover {
+        background: #ddd;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Stato
 if "start_pos" not in st.session_state:
     st.session_state.start_pos = None
 
+cols_labels = list(string.ascii_uppercase[:8])
+rows_labels = list(range(8, 0, -1))
+
+# Disegna scacchiera
 if st.session_state.start_pos is None:
-    st.markdown("<h1 style='text-align: center; color: brown;margin-top:-70px;'>Il salto del cavallo ♞</h1>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: gray;margin-top:-15px;font-size:18px;'>Scegli la casella da cui partire e visualizza il percorso del cavallo sulla scacchiera</h2>", unsafe_allow_html=True)
-
-    # Mostro i bottoni della scacchiera
-    pos = chessboard_buttons()
-    if pos is not None:
-        st.session_state.temp_pos = pos  # salvo temporaneamente la selezione
-
-    # Bottone di conferma
-    if "temp_pos" in st.session_state:
-        col1, col2, col3 = st.columns([3,1,3])
-        with col2:
-            if st.button("✅ Conferma casella"):
-                st.session_state.start_pos = st.session_state.temp_pos
-                del st.session_state.temp_pos
-
+    st.markdown("<h2 style='text-align:center;'>Scegli una casella</h2>", unsafe_allow_html=True)
+    
+    html_board = "<div class='chessboard'>"
+    for row in rows_labels:
+        for col_idx in range(8):
+            square_name = f"{cols_labels[col_idx]}{row}"
+            if st.button(square_name, key=square_name, help=f"Seleziona {square_name}"):
+                st.session_state.start_pos = (col_idx, row-1)
+                st.rerun()
+            html_board += f"<button class='square-btn'>{square_name}</button>"
+    html_board += "</div>"
+    
+    st.markdown(html_board, unsafe_allow_html=True)
 else:
     col, row = st.session_state.start_pos
-    cols_labels = list(string.ascii_uppercase[:8])
     square_name = f"{cols_labels[col]}{row+1}"
+    st.markdown(f"<h3 style='text-align:center;'>Casella selezionata: {square_name}</h3>", unsafe_allow_html=True)
 
-    # Pulsante per tornare indietro
-    col4, col5 = st.columns([0.7, 0.3])
-    with col5:
-        if st.button("🔄 Scegli un'altra casella"):
-            st.session_state.start_pos = None
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<h1 style='text-align: center; color: brown;margin-top:-50px;'>Il salto del cavallo ♞</h1>", unsafe_allow_html=True)
-    st.markdown(f"<h3 style='text-align: center; color: black;margin-top:-15px;'>Casella selezionata: {square_name}</h3>", unsafe_allow_html=True)
-
-    # Calcolo e mostra animazione
-    with st.spinner("Il calcolo del percorso del cavallo potrebbe richiedere alcuni secondi..."):        
-        tour = solve_knight_tour((row, col))
-        if tour:
-            gif_bytes = animate_knight_tour(tour, interval=500, fps=2)
-            st.image(gif_bytes, use_container_width=True)
-        else:
-            st.error("Nessun tour trovato")
+    if st.button("🔄 Scegli un'altra casella"):
+        st.session_state.start_pos = None
+        st.rerun()
